@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <%- include('partials/header', { title: 'Contato | Cazzola Propiedades' }) %>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="mb-4">Contato / Quero mais informações</h1>
+      <p class="mb-4">Preencha o formulário e nossa equipe retornará rapidamente.</p>
+
+      <% if (submitted) { %>
+      <div class="alert alert-success">Lead recebido! Entraremos em contato em breve.</div>
+      <% } %>
+
+      <% if (errors && errors.length) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(function(error){ %>
+          <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+
+      <div id="lead-alert" class="alert d-none" role="alert"></div>
+
+      <form action="/contato" method="POST" class="row g-3" id="contact-form" data-api="/api/leads">
+        <div class="col-md-6">
+          <label class="form-label">Nome *</label>
+          <input type="text" name="name" class="form-control" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">E-mail *</label>
+          <input type="email" name="email" class="form-control" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Telefone</label>
+          <input type="text" name="phone" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Tipo de interesse</label>
+          <select name="interest" class="form-select">
+            <option value="compra">Compra</option>
+            <option value="aluguel">Aluguel</option>
+            <option value="gestao">Gestão</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Mensagem</label>
+          <textarea name="message" class="form-control" rows="4" placeholder="Conte-nos sobre o imóvel ou necessidade"></textarea>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Enviar lead</button>
+        </div>
+      </form>
+    </div>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

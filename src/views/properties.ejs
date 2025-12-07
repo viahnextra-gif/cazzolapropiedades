@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <%- include('partials/header', { title: 'Imóveis | Cazzola Propiedades' }) %>
+  </head>
+  <body>
+    <div class="container py-5">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+          <h1 class="mb-1">Imóveis</h1>
+          <p class="text-muted">Filtre por tipo, localização, preço ou quartos.</p>
+        </div>
+        <a href="/admin/imoveis/novo" class="btn btn-outline-primary">Cadastrar imóvel</a>
+      </div>
+
+      <form class="card card-body mb-4" method="get">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Tipo</label>
+            <select name="type" class="form-select">
+              <option value="" <%= !filters.type ? 'selected' : '' %>>Todos</option>
+              <option value="venda" <%= filters.type === 'venda' ? 'selected' : '' %>>Venda</option>
+              <option value="aluguel" <%= filters.type === 'aluguel' ? 'selected' : '' %>>Aluguel</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Cidade</label>
+            <input name="city" class="form-control" placeholder="Asunción" value="<%= filters.city || '' %>" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Bairro</label>
+            <input name="neighborhood" class="form-control" placeholder="Carmelitas" value="<%= filters.neighborhood || '' %>" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Preço mín.</label>
+            <input name="minPrice" type="number" class="form-control" min="0" value="<%= filters.minPrice || '' %>" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Preço máx.</label>
+            <input name="maxPrice" type="number" class="form-control" min="0" value="<%= filters.maxPrice || '' %>" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Quartos</label>
+            <input name="bedrooms" type="number" class="form-control" min="0" value="<%= filters.bedrooms || '' %>" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+              <option value="" <%= !filters.status ? 'selected' : '' %>>Todos</option>
+              <option value="ativo" <%= filters.status === 'ativo' ? 'selected' : '' %>>Ativo</option>
+              <option value="inativo" <%= filters.status === 'inativo' ? 'selected' : '' %>>Inativo</option>
+            </select>
+          </div>
+          <div class="col-12 d-flex justify-content-end gap-2">
+            <button class="btn btn-primary" type="submit">Filtrar</button>
+            <a class="btn btn-outline-secondary" href="/properties">Limpar</a>
+          </div>
+        </div>
+      </form>
+
+      <div class="row g-4">
+        <% if (!properties.length) { %>
+        <p class="text-muted">Nenhum imóvel encontrado. Utilize o formulário de cadastro para adicionar.</p>
+        <% } %>
+
+        <% properties.forEach(function(property){ %>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <% if (property.images && property.images.length) { %>
+            <img src="<%= property.images[0] %>" class="card-img-top" alt="Foto do imóvel" />
+            <% } else { %>
+            <div class="placeholder-image">Imagem do imóvel</div>
+            <% } %>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title"><%= property.title %></h5>
+              <p class="text-muted mb-1">Tipo: <%= property.type %> · Status: <%= property.status %></p>
+              <p class="text-primary fw-bold mb-1">$<%= property.price.toLocaleString('pt-BR') %></p>
+              <p class="mb-2"><i class="bi bi-geo-alt"></i> <%= formatLocation(property) %></p>
+              <p class="mb-3"><%= property.bedrooms || 0 %> quartos · <%= property.bathrooms || 0 %> banheiros · <%= property.area || 0 %>m²</p>
+              <a href="/properties/<%= property._id %>" class="btn btn-outline-primary mt-auto">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

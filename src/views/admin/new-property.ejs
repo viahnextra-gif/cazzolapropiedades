@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <%- include('../partials/header', { title: 'Cadastrar imóvel | Admin' }) %>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="mb-4">Cadastrar novo imóvel</h1>
+      <p class="text-muted">Use este formulário para inserir imóveis reais no banco.</p>
+
+      <% if (submitted) { %>
+      <div class="alert alert-success">Imóvel salvo com sucesso.</div>
+      <% } %>
+
+      <% if (errors && errors.length) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(function(error){ %>
+          <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+
+      <form action="/admin/imoveis/novo" method="POST" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Título *</label>
+          <input type="text" name="title" class="form-control" required />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Tipo *</label>
+          <select name="type" class="form-select" required>
+            <option value="venda">Venda</option>
+            <option value="aluguel">Aluguel</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Preço *</label>
+          <input type="number" name="price" class="form-control" min="0" required />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Status *</label>
+          <select name="status" class="form-select" required>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Endereço (rua e número) *</label>
+          <input type="text" name="address" class="form-control" required />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Bairro *</label>
+          <input type="text" name="neighborhood" class="form-control" required />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Cidade *</label>
+          <input type="text" name="city" class="form-control" required />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Estado/Região</label>
+          <input type="text" name="state" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Quartos</label>
+          <input type="number" name="bedrooms" class="form-control" min="0" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Banheiros</label>
+          <input type="number" name="bathrooms" class="form-control" min="0" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Metragem (m²)</label>
+          <input type="number" name="area" class="form-control" min="0" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">URLs das imagens (separadas por vírgula)</label>
+          <textarea name="images" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Descrição</label>
+          <textarea name="description" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Salvar imóvel</button>
+        </div>
+      </form>
+    </div>
+
+    <%- include('../partials/footer') %>
+  </body>
+</html>

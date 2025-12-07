@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imóveis — Cazzola Propiedades</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="listings">
+  <header>
+    <nav class="navbar">
+      <a class="brand" href="index.html">
+        <div class="logo-placeholder">CP</div>
+        <div>
+          <div>Cazzola Propiedades</div>
+          <div class="tagline">Imóveis de alto padrão e gestão completa</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="listings.html">Imóveis</a>
+        <a href="index.html#servicos">Serviços</a>
+        <a href="index.html#blog">Blog</a>
+        <a href="contact.html">Contato</a>
+      </div>
+      <div class="nav-actions">
+        <a class="button secondary" href="contact.html">Agendar visita</a>
+        <a class="button primary" href="contact.html">Anunciar</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="index.html">Home</a> / <span>Imóveis</span>
+  </div>
+
+  <section class="section">
+    <h1>Imóveis disponíveis</h1>
+    <p class="lead">Resultados usando dados fictícios. No backend real, estes filtros acionarão uma busca na API.</p>
+
+    <form class="filters" data-filter-form>
+      <div>
+        <label class="label" for="type">Tipo</label>
+        <select class="select" id="type" name="type">
+          <option value="">Todos</option>
+          <option value="Venda">Venda</option>
+          <option value="Aluguel">Aluguel</option>
+        </select>
+      </div>
+      <div>
+        <label class="label" for="location">Bairro / cidade</label>
+        <input class="input" id="location" name="location" placeholder="Ex: Ipanema" />
+      </div>
+      <div>
+        <label class="label" for="min">Preço mínimo (R$)</label>
+        <input class="input" id="min" name="min" type="number" min="0" placeholder="500000" />
+      </div>
+      <div>
+        <label class="label" for="max">Preço máximo (R$)</label>
+        <input class="input" id="max" name="max" type="number" min="0" placeholder="2500000" />
+      </div>
+    </form>
+
+    <div class="cards-grid" data-listings>
+      <!-- Cards são injetados via scripts.js; futuramente virão da API / banco. -->
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="brand">
+          <div class="logo-placeholder">CP</div>
+          <div>Cazzola Propiedades</div>
+        </div>
+        <p>Conectando pessoas e imóveis com tecnologia e atendimento humano.</p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <div class="small">contato@cazzolapropiedades.com</div>
+        <div class="small">+55 (11) 99999-0000</div>
+        <div class="small">Av. Paulista, 1000 — São Paulo</div>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <div class="social-links">
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
