@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contato | Cazzola Propiedades</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <%- include('partials/header') %>
+    <main class="container mb-5">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <p class="text-uppercase text-muted mb-1">Contato</p>
+          <h1 class="h3">Fale com nossa equipe</h1>
+          <p class="text-muted">Preencha o formulário e retornaremos em breve.</p>
+          <ul class="list-unstyled small text-muted">
+            <li>Email: contato@cazzola.com</li>
+            <li>Telefone: +595 111 222 333</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <% if (submitted) { %>
+            <div class="alert alert-success">Obrigado pelo contato! Em breve retornaremos.</div>
+          <% } %>
+          <% if (errors && errors.length) { %>
+            <div class="alert alert-danger">
+              <p class="mb-1 fw-semibold">Corrija os campos abaixo:</p>
+              <ul class="mb-0">
+                <% errors.forEach((err) => { %>
+                  <li><%= err.msg %></li>
+                <% }) %>
+              </ul>
+            </div>
+          <% } %>
+          <form method="post" action="/contato" class="card p-3 shadow-sm">
+            <div class="mb-3">
+              <label class="form-label">Nome*</label>
+              <input name="name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">E-mail*</label>
+              <input type="email" name="email" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Telefone</label>
+              <input name="phone" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Interesse</label>
+              <select name="interest" class="form-select">
+                <option value="aluguel">Aluguel</option>
+                <option value="compra">Compra</option>
+                <option value="gestao">Gestão</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mensagem</label>
+              <textarea name="message" rows="4" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <%- include('partials/footer') %>
+  </body>
+</html>
