@@ -1,94 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <%- include('partials/header', { title: 'Cazzola Propiedades' }) %>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | Cazzola Propiedades</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
-  <body>
-    <header class="hero">
-      <div class="container">
-        <h1 class="display-5 fw-bold">Encontre o imóvel perfeito no Paraguai</h1>
-        <p class="lead">Venda, aluguel e gestão profissional com atendimento bilíngue.</p>
-        <div class="d-flex gap-2">
-          <a href="/properties?type=venda" class="btn btn-primary">Comprar</a>
-          <a href="/properties?type=aluguel" class="btn btn-outline-light">Alugar</a>
-        </div>
-      </div>
-    </header>
-
-    <main class="container py-5">
-      <section class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-          <h2 class="h4 mb-0">Destaques recentes</h2>
-          <a href="/properties" class="btn btn-outline-primary btn-sm">Ver todos</a>
-        </div>
-        <div class="row g-4">
-          <% if (!featured.length) { %>
-          <p class="text-muted">Cadastre um imóvel para que apareça aqui.</p>
-          <% } %>
-          <% featured.forEach(function(property){ %>
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <% if (property.images && property.images.length) { %>
-              <img src="<%= property.images[0] %>" class="card-img-top" alt="Foto do imóvel" />
-              <% } else { %>
-              <div class="placeholder-image">Imagem do imóvel</div>
-              <% } %>
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><%= property.title %></h5>
-                <p class="text-primary fw-bold mb-1">$<%= property.price.toLocaleString('pt-BR') %></p>
-                <p class="text-muted mb-2"><i class="bi bi-geo-alt"></i> <%= formatLocation(property) %></p>
-                <p class="mb-3"><%= property.bedrooms || 0 %> quartos · <%= property.bathrooms || 0 %> banheiros</p>
-                <a href="/properties/<%= property._id %>" class="btn btn-outline-primary mt-auto">Ver detalhes</a>
-              </div>
-            </div>
-          </div>
-          <% }); %>
+  <body class="d-flex flex-column min-vh-100">
+    <%- include('partials/header') %>
+    <main class="container mb-5">
+      <section class="py-4 text-center">
+        <p class="text-uppercase text-muted mb-1">Cazzola Propiedades</p>
+        <h1 class="fw-bold">Imobiliária moderna para venda e aluguel</h1>
+        <p class="lead text-muted">Busque, visite e feche negócios com suporte especializado.</p>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+          <a class="btn btn-primary" href="/imoveis">Ver imóveis</a>
+          <a class="btn btn-outline-primary" href="/contato">Quero contato</a>
         </div>
       </section>
 
-      <section class="row g-4 align-items-center mb-5">
-        <div class="col-md-6">
-          <h2 class="h4">Gestão completa para investidores</h2>
-          <p>Gerencie locação, manutenção e vacância com dashboards e alertas. Integre com CRM e fluxos de atendimento.</p>
-          <a href="/contato" class="btn btn-primary">Fale com um consultor</a>
+      <section class="py-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="h4 mb-0">Destaques recentes</h2>
+          <a class="btn btn-link" href="/imoveis">Ver todos</a>
         </div>
-        <div class="col-md-6">
-          <div class="card shadow-sm p-4">
-            <h3 class="h5">Buscador rápido</h3>
-            <form action="/properties" class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Tipo</label>
-                <select name="type" class="form-select">
-                  <option value="">Todos</option>
-                  <option value="venda">Venda</option>
-                  <option value="aluguel">Aluguel</option>
-                </select>
+        <div class="row g-3">
+          <% if (featured && featured.length) { %>
+            <% featured.forEach((property) => { %>
+              <div class="col-md-4">
+                <article class="card h-100">
+                  <div class="ratio ratio-16x9 bg-light">
+                    <img
+                      src="<%= property.images && property.images[0] ? property.images[0] : 'https://via.placeholder.com/800x450' %>"
+                      class="card-img-top object-fit-cover"
+                      alt="Foto do imóvel"
+                    />
+                  </div>
+                  <div class="card-body">
+                    <p class="small text-uppercase text-muted mb-1"><%= property.type %> • <%= property.status %></p>
+                    <h3 class="h5"><%= property.title %></h3>
+                    <p class="fw-semibold text-primary">US$ <%= property.price %></p>
+                    <p class="text-muted small mb-2"><%= formatLocation(property) %></p>
+                    <a class="btn btn-outline-primary btn-sm" href="/imoveis/<%= property._id %>">Ver detalhes</a>
+                  </div>
+                </article>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">Cidade</label>
-                <input name="city" class="form-control" placeholder="Asunción" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Bairro</label>
-                <input name="neighborhood" class="form-control" placeholder="Carmelitas" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Preço máx.</label>
-                <input type="number" name="maxPrice" class="form-control" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Quartos</label>
-                <input type="number" name="bedrooms" class="form-control" />
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
-              </div>
-            </form>
-          </div>
+            <% }); %>
+          <% } else { %>
+            <p class="text-muted">Cadastre imóveis para vê-los aqui.</p>
+          <% } %>
         </div>
       </section>
     </main>
-
     <%- include('partials/footer') %>
   </body>
 </html>

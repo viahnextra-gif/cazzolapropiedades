@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin • Imóveis | Cazzola</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <%- include('../partials/header') %>
+    <main class="container mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <p class="text-uppercase text-muted mb-1">Admin</p>
+          <h1 class="h4 mb-0">Imóveis cadastrados</h1>
+        </div>
+        <a class="btn btn-primary" href="/admin/properties/new">+ Novo imóvel</a>
+      </div>
+      <div class="table-responsive card shadow-sm">
+        <table class="table mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Preço</th>
+              <th>Localização</th>
+              <th>Criado em</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (properties && properties.length) { %>
+              <% properties.forEach((property) => { %>
+                <tr>
+                  <td><a href="/imoveis/<%= property._id %>"><%= property.title %></a></td>
+                  <td><%= property.type %></td>
+                  <td><%= property.status %></td>
+                  <td>US$ <%= property.price %></td>
+                  <td><%= formatLocation(property) %></td>
+                  <td><%= property.createdAt.toLocaleDateString() %></td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr><td colspan="6" class="text-muted">Nenhum imóvel cadastrado.</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <p class="small text-muted mt-2">CRUD completo via API disponível em /api/imoveis.</p>
+    </main>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

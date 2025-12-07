@@ -7,7 +7,7 @@ function formatLocation(property) {
   return property.fullLocation || property.address || property.neighborhood || '';
 }
 
-// Render home with últimos imóveis.
+// Home destaca os últimos imóveis cadastrados.
 exports.renderHome = async (req, res, next) => {
   try {
     const featured = await Property.find({ status: 'ativo' }).sort({ createdAt: -1 }).limit(3);
@@ -17,13 +17,13 @@ exports.renderHome = async (req, res, next) => {
   }
 };
 
-// Render property list with filters similar to API.
-exports.renderProperties = async (req, res, next) => {
+// Listagem de imóveis com filtros básicos (mesmos filtros da API REST).
+exports.renderListings = async (req, res, next) => {
   try {
     const filters = buildFilters(req.query);
     const properties = await Property.find(filters).sort({ createdAt: -1 });
 
-    res.render('properties', {
+    res.render('listings', {
       properties,
       filters: req.query,
       formatLocation,
@@ -33,19 +33,21 @@ exports.renderProperties = async (req, res, next) => {
   }
 };
 
-exports.renderPropertyDetail = async (req, res, next) => {
+// Página de detalhe de um imóvel específico.
+exports.renderDetail = async (req, res, next) => {
   try {
     const property = await Property.findById(req.params.id);
     if (!property) {
       return res.status(404).send('Imóvel não encontrado');
     }
 
-    return res.render('property-detail', { property, formatLocation });
+    return res.render('detail', { property, formatLocation });
   } catch (error) {
     return next(error);
   }
 };
 
+// Formulário de contato para capturar leads.
 exports.renderContactForm = (req, res) => {
   res.render('contact', { submitted: false, errors: [] });
 };
@@ -65,6 +67,16 @@ exports.submitContactForm = async (req, res, next) => {
     return res.render('contact', { submitted: true, errors: [] });
   } catch (error) {
     return next(error);
+  }
+};
+
+// Admin: listagem de imóveis simples para gestão.
+exports.renderAdminProperties = async (req, res, next) => {
+  try {
+    const properties = await Property.find().sort({ createdAt: -1 });
+    res.render('admin/properties', { properties, formatLocation });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -92,5 +104,14 @@ exports.handleNewPropertyForm = async (req, res, next) => {
     return res.render('admin/new-property', { errors: [], submitted: true });
   } catch (error) {
     return next(error);
+  }
+};
+
+exports.renderAdminLeads = async (req, res, next) => {
+  try {
+    const leads = await Lead.find().sort({ createdAt: -1 });
+    res.render('admin/leads', { leads });
+  } catch (error) {
+    next(error);
   }
 };

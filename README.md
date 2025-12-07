@@ -43,14 +43,16 @@ npm run dev
 A aplicação roda em `http://localhost:3000` e expõe `/health` para verificação.
 
 ## Rotas principais
-### Páginas
-- `GET /` — home com destaques
-- `GET /properties` — listagem com filtros (tipo, localização, preço, quartos)
-- `GET /properties/:id` — detalhe do imóvel
-- `GET /contato` — formulário de lead; envia via JavaScript para `POST /api/leads` e exibe confirmação sem recarregar
-- `GET /admin/imoveis/novo` e `POST /admin/imoveis/novo` — cadastro de imóveis via formulário (sem autenticação nesta fase)
+### Páginas (EJS)
+- `GET /` — home com destaques do banco
+- `GET /imoveis` — listagem com filtros básicos
+- `GET /imoveis/:id` — detalhe do imóvel
+- `GET /contato` + `POST /contato` — formulário de lead que salva no MongoDB
+- `GET /admin/properties` — grid simples de imóveis
+- `GET /admin/properties/new` + `POST /admin/properties/new` — cadastro de imóveis (sem autenticação nesta fase)
+- `GET /admin/leads` — tabela de leads
 
-### API REST
+### API REST (prefixo /api)
 - `GET /api/imoveis` — lista imóveis com filtros por query string
 - `GET /api/imoveis/:id` — detalhe
 - `POST /api/imoveis` — cria imóvel (JSON)
@@ -80,9 +82,9 @@ src/
   config/         # Conexão com banco
   controllers/    # Lógica das rotas
   models/         # Mongoose models
-  routes/         # Rotas de páginas e APIs
-  views/          # Templates EJS
-  server.js       # Entrypoint
+  routes/         # Rotas de páginas (web.js) e APIs (api.js)
+  views/          # Templates EJS e partials
+server.js         # Entrypoint Express
 ```
 
 ## Próximos passos sugeridos
