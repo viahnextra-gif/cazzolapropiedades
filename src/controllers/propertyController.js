@@ -118,4 +118,3 @@ exports.deleteProperty = async (req, res, next) => {
   }
 };
 
-exports.buildFilters = buildFilters;
