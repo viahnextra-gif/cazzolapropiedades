@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Imóveis | Cazzola Propiedades</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body data-page="listings">
+    <%- include('partials/header') %>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <div class="badge">Busca dinâmica</div>
+          <h1>Encontre o imóvel certo</h1>
+          <p class="lead">Use filtros de tipo, faixa de preço e cidade. Dados vêm direto do MongoDB.</p>
+        </div>
+        <a class="button primary" href="/contact">Fale com um consultor</a>
+      </div>
+
+      <form class="filters" method="get" data-filter-form>
+        <div>
+          <label for="category">Tipo</label>
+          <select id="category" name="category">
+            <option value="">Todos</option>
+            <% filterOptions.categories.forEach((cat) => { %>
+              <option value="<%= cat %>" <%= filters.category === cat ? 'selected' : '' %>><%= cat %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label for="type">Operação</label>
+          <select id="type" name="type">
+            <option value="">Venda ou aluguel</option>
+            <% filterOptions.types.forEach((opt) => { %>
+              <option value="<%= opt %>" <%= filters.type === opt ? 'selected' : '' %>><%= opt %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label for="city">Cidade</label>
+          <input id="city" type="text" name="city" placeholder="Ex: Asunción" value="<%= filters.city || '' %>" />
+        </div>
+        <div>
+          <label for="min">Preço mín.</label>
+          <input id="min" type="number" name="min" placeholder="0" value="<%= filters.min || '' %>" />
+        </div>
+        <div>
+          <label for="max">Preço máx.</label>
+          <input id="max" type="number" name="max" placeholder="250000" value="<%= filters.max || '' %>" />
+        </div>
+        <button class="button secondary" type="submit">Filtrar</button>
+      </form>
+
+      <div class="cards-grid">
+        <% if (properties && properties.length) { %>
+          <% properties.forEach((property) => { %>
+            <article class="card property-card">
+              <div class="property-media">
+                <img
+                  src="<%= property.images && property.images[0] ? property.images[0] : 'https://via.placeholder.com/800x450' %>"
+                  alt="Foto do imóvel"
+                />
+              </div>
+              <div class="property-content">
+                <div class="pill"><%= property.category %> • <%= property.type %></div>
+                <h3><%= property.title %></h3>
+                <div class="price">US$ <%= property.price %></div>
+                <p class="small"><%= formatLocation(property) %></p>
+                <div class="property-meta">
+                  <span><%= property.bedrooms %> quartos</span>
+                  <span><%= property.bathrooms %> banheiros</span>
+                  <span><%= property.area %> m²</span>
+                </div>
+                <div class="property-actions">
+                  <a class="button secondary" href="/properties/<%= property._id %>">Ver detalhes</a>
+                  <a class="button ghost" href="/contact?propertyId=<%= property._id %>&title=<%= property.title %>">Quero visitar</a>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        <% } else { %>
+          <p class="small">Nenhum imóvel encontrado para os filtros selecionados.</p>
+        <% } %>
+      </div>
+    </section>
+
+    <%- include('partials/footer') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

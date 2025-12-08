@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar imóvel | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body data-page="admin">
+    <%- include('../partials/header') %>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h1>Editar imóvel</h1>
+          <p class="lead">Atualize dados, fotos e status.</p>
+        </div>
+        <a class="button secondary" href="/admin/properties">Voltar</a>
+      </div>
+
+      <% if (errors && errors.length) { %>
+        <div class="alert error"><%= errors.map((err) => err.msg).join(', ') %></div>
+      <% } %>
+
+      <% if (submitted) { %>
+        <div class="alert success">Imóvel atualizado com sucesso!</div>
+      <% } %>
+
+      <form class="card form-grid" action="/admin/properties/edit/<%= property._id %>" method="post" enctype="multipart/form-data">
+        <label>Título<input type="text" name="title" value="<%= property.title || '' %>" required /></label>
+        <label>Categoria
+          <select name="category" required>
+            <option value="casa" <%= property.category === 'casa' ? 'selected' : '' %>>Casa</option>
+            <option value="apartamento" <%= property.category === 'apartamento' ? 'selected' : '' %>>Apartamento</option>
+            <option value="terreno" <%= property.category === 'terreno' ? 'selected' : '' %>>Terreno</option>
+            <option value="comercial" <%= property.category === 'comercial' ? 'selected' : '' %>>Comercial</option>
+          </select>
+        </label>
+        <label>Operação
+          <select name="type" required>
+            <option value="venda" <%= property.type === 'venda' ? 'selected' : '' %>>Venda</option>
+            <option value="aluguel" <%= property.type === 'aluguel' ? 'selected' : '' %>>Aluguel</option>
+          </select>
+        </label>
+        <label>Preço<input type="number" name="price" value="<%= property.price || '' %>" required /></label>
+        <label>Endereço<input type="text" name="address" value="<%= property.address || '' %>" required /></label>
+        <label>Bairro<input type="text" name="neighborhood" value="<%= property.neighborhood || '' %>" required /></label>
+        <label>Cidade<input type="text" name="city" value="<%= property.city || '' %>" required /></label>
+        <label>Estado<input type="text" name="state" value="<%= property.state || '' %>" /></label>
+        <label>Quartos<input type="number" name="bedrooms" value="<%= property.bedrooms || 0 %>" /></label>
+        <label>Banheiros<input type="number" name="bathrooms" value="<%= property.bathrooms || 0 %>" /></label>
+        <label>Metragem (m²)<input type="number" name="area" value="<%= property.area || 0 %>" /></label>
+        <label>Status
+          <select name="status">
+            <option value="ativo" <%= property.status === 'ativo' ? 'selected' : '' %>>Ativo</option>
+            <option value="inativo" <%= property.status === 'inativo' ? 'selected' : '' %>>Inativo</option>
+          </select>
+        </label>
+        <label>URLs de imagens (adicionais, separadas por vírgula)
+          <textarea name="imageUrls" rows="2"></textarea>
+        </label>
+        <label>Upload de imagens
+          <input type="file" name="images" multiple />
+        </label>
+        <label>Mapa embed URL (opcional)
+          <input type="text" name="mapUrl" value="<%= property.mapUrl || '' %>" placeholder="https://www.google.com/maps/embed?..." />
+        </label>
+        <label>Descrição<textarea name="description" rows="4"><%= property.description || '' %></textarea></label>
+        <button class="button primary" type="submit">Salvar alterações</button>
+      </form>
+
+      <div class="card">
+        <h3>Imagens atuais</h3>
+        <div class="thumbs">
+          <% if (property.images && property.images.length) { %>
+            <% property.images.forEach((img) => { %>
+              <div class="thumb static">
+                <img src="<%= img %>" alt="Imagem cadastrada" />
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p class="small">Nenhuma imagem cadastrada ainda.</p>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <%- include('../partials/footer') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ficha do imóvel — Cazzola Propiedades</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="detail">
+  <header>
+    <nav class="navbar">
+      <a class="brand" href="index.html">
+        <div class="logo-placeholder">CP</div>
+        <div>
+          <div>Cazzola Propiedades</div>
+          <div class="tagline">Imóveis de alto padrão e gestão completa</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="listings.html">Imóveis</a>
+        <a href="index.html#servicos">Serviços</a>
+        <a href="index.html#blog">Blog</a>
+        <a href="contact.html">Contato</a>
+      </div>
+      <div class="nav-actions">
+        <a class="button secondary" href="listings.html">Voltar</a>
+        <a class="button primary" href="contact.html">Agendar visita</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="index.html">Home</a> / <a href="listings.html">Imóveis</a> / <span>Detalhe</span>
+  </div>
+
+  <div data-property-detail>
+    <!-- Conteúdo dinâmico da ficha é renderizado via scripts.js. 
+         Futuramente, substituir por fetch de /api/imoveis/:id + CMS de mídia. -->
+  </div>
+
+  <section class="section" style="padding-top: 16px;">
+    <div class="form-card">
+      <h2>Solicitar visita ou proposta</h2>
+      <p class="lead">Formulário conectado ao protótipo; em produção, enviaremos ao CRM / e-mail e registraremos o lead.</p>
+      <form class="grid-2" data-contact-form>
+        <div>
+          <label class="label" for="nome">Nome</label>
+          <input class="input" id="nome" name="nome" required />
+        </div>
+        <div>
+          <label class="label" for="email">Email</label>
+          <input class="input" id="email" name="email" type="email" required />
+        </div>
+        <div>
+          <label class="label" for="telefone">Telefone</label>
+          <input class="input" id="telefone" name="telefone" type="tel" />
+        </div>
+        <div>
+          <label class="label" for="interesse">Interesse</label>
+          <select class="select" id="interesse" name="interesse" required>
+            <option value="">Selecione</option>
+            <option value="compra">Compra</option>
+            <option value="aluguel">Aluguel</option>
+            <option value="gestao">Gestão / administração</option>
+          </select>
+        </div>
+        <div style="grid-column: 1 / -1;">
+          <label class="label" for="mensagem">Mensagem</label>
+          <textarea class="textarea" id="mensagem" name="mensagem" rows="4" placeholder="Ex: Quero agendar visita na próxima semana"></textarea>
+        </div>
+        <div style="grid-column: 1 / -1; display: flex; gap: 12px; align-items: center;">
+          <button class="button primary" type="submit">Enviar interesse</button>
+          <span class="small" data-feedback></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="brand">
+          <div class="logo-placeholder">CP</div>
+          <div>Cazzola Propiedades</div>
+        </div>
+        <p>Conectando pessoas e imóveis com tecnologia e atendimento humano.</p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <div class="small">contato@cazzolapropiedades.com</div>
+        <div class="small">+55 (11) 99999-0000</div>
+        <div class="small">Av. Paulista, 1000 — São Paulo</div>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <div class="social-links">
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
