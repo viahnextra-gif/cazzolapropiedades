@@ -1,5 +1,3 @@
-// Service utilities related to Property domain logic.
-// Currently exposes filter builder logic used by controllers without altering behavior.
 function buildFilters(query) {
   const { type, category, location, city, neighborhood, minPrice, maxPrice, min, max, bedrooms, status, q } = query;
   const filters = {};
