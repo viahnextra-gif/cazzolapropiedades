@@ -1,39 +1,42 @@
 # Cazzola Propiedades
 
-Site imobiliário focado em venda/aluguel com backend Express + MongoDB, páginas EJS e API RESTful para imóveis, leads e autenticação com roles.
+Plataforma imobiliária full-stack com Express, MongoDB e EJS: catálogo de imóveis com filtros, painel administrativo com CRUD, uploads de imagens, leads com consentimento LGPD/Ley PY e autenticação por JWT.
 
 ---
 
-## Stack final
-- **Backend:** Node.js 18+, Express 5, EJS com layout do protótipo integrado
-- **Banco de dados (implementado):** MongoDB com Mongoose — NoSQL flexível para iterar rápido em esquemas de imóveis com campos opcionais, fotos, geolocalização futura
-- **Opção alternativa:** PostgreSQL + Prisma — forte consistência relacional e SQL avançado para BI, mas exige migrações versionadas a cada mudança de schema
-- **Middlewares:** cors, morgan, express-validator para validação, dotenv para variáveis de ambiente, multer para upload de imagens (salvos em `public/uploads`)
-- **Frontend:** CSS autoral baseado no protótipo; templates EJS para home, listagem com filtros, detalhe, contato e painel admin
+## Stack
+- **Runtime:** Node.js 18+
+- **Framework:** Express 5 + EJS (SSR) com layout do protótipo integrado
+- **Banco:** MongoDB + Mongoose (NoSQL flexível para atributos dinâmicos)
+- **Upload:** Multer gravando arquivos em `public/uploads`
+- **Middlewares:** morgan (logs), cors, express-validator, dotenv, auth JWT
+- **Frontend:** CSS autoral em `public/css/site.css`, templates EJS em `src/views`
+
+> Alternativa considerada: PostgreSQL + Prisma (consistência relacional/BI), porém com custo de migrações rigorosas.
 
 ---
 
-## Banco escolhido e trade-offs
-### ✔ MongoDB (atual)
-Flexível, rápido para prototipação, ideal para atributos mutáveis (amenidades, fotos, georreferência). Permite seeds simples e schemas que evoluem sem migrações rígidas.
-
-### ✔ PostgreSQL (alternativa)
-Consistência relacional alta e SQL poderoso para BI. Trade-off: cada mudança exige migrações estruturadas e planejamento prévio de schema.
-
----
-
-## Pré-requisitos
-- Node.js 18+
-- npm
-- MongoDB (Atlas ou local) acessível
+## Estrutura de pastas
+```
+public/                 # CSS, JS e uploads
+scripts/seed.js         # população inicial
+server.js               # shim -> src/server.js
+src/
+  config/               # env, db, compliance, upload
+  controllers/          # lógicas de página, imóveis, leads, auth
+  middleware/           # auth JWT, roles, validação
+  models/               # Property, Lead, User
+  routes/               # web, api, auth
+  utils/                # consentimento LGPD/PY
+  views/                # templates EJS + partials + admin
+```
 
 ---
 
 ## Variáveis de ambiente
-Copie `.env.example` → `.env` e preencha:
-
-```env
-MONGODB_URI=mongodb://usuario:senha@host:27017/cazzola
+Copie `.env.example` para `.env` e ajuste valores:
+```
+MONGODB_URI=mongodb+srv://SEU_USUARIO:SUA_SENHA@SEU_CLUSTER.mongodb.net/cazzola?retryWrites=true&w=majority
 JWT_SECRET=sua-chave-secreta
 PORT=3000
 NODE_ENV=development
@@ -42,107 +45,95 @@ APP_URL=http://localhost:3000
 DEFAULT_LAW=lgpd_br
 DPO_EMAIL=dpo@example.com
 ```
+- `MONGODB_URI`: string de conexão (Atlas/local)
+- `JWT_SECRET`: chave para assinar tokens (troque em produção)
+- `PORT`: porta de escuta (Railway pode definir automaticamente)
+- `NODE_ENV`: ambiente (`development`/`production`)
+- `APP_NAME`/`APP_URL`: usados em logs/templates
+- `DEFAULT_LAW`/`DPO_EMAIL`: parâmetros de compliance e contato do DPO
 
-- `MONGODB_URI`: string de conexão MongoDB (Atlas ou local)
-- `JWT_SECRET`: chave para assinar tokens JWT (trocar em produção)
-- `PORT`: porta do servidor Express
-- `NODE_ENV`: ambiente (`development` ou `production`)
-- `APP_NAME` / `APP_URL`: usados em logs/templates
-- `DEFAULT_LAW` e `DPO_EMAIL`: parâmetros de conformidade/contato do DPO
+---
+
+## Modelos principais
+- **Property**: título, tipo (venda/aluguel), categoria, status, preço, endereço/bairro/cidade, quartos, banheiros, área, descrição, imagens `[String]`, datas de criação/atualização.
+- **Lead**: nome, email, telefone, interesse, mensagem, propertyId opcional, status, timestamps.
+- **User**: nome, email, telefone, senha hash, role (`admin`/`corretor`/`cliente`), status, consentimento LGPD/PY (aceito/data/versão/ip), favoritos `[ObjectId]`, documentos enviados, agenda, notificações, refresh tokens, timestamps.
+
+---
+
+## Rotas Web (EJS)
+- `GET /` — home com destaques recentes
+- `GET /properties` — listagem com filtros de tipo, categoria, cidade e faixa de preço
+- `GET /properties/:id` — detalhe com galeria, mapa placeholder e CTA WhatsApp/contato
+- `GET /contact` — formulário de contato; `POST /contact` cria lead
+- `GET /admin` — atalho para `/admin/properties`
+- `GET /admin/properties` — grid de imóveis com ações
+- `GET /admin/properties/new` / `POST /admin/properties` — criação (upload múltiplo)
+- `GET /admin/properties/edit/:id` / `POST /admin/properties/edit/:id` — edição
+- `POST /admin/properties/delete/:id` — exclusão
+- `GET /admin/leads` — listagem de leads
+
+## API REST (prefixo /api)
+- `GET /api/properties` — lista com filtros por query (`category`, `type`, `city`, `min`, `max`, `status`)
+- `GET /api/properties/:id` — detalhe
+- `POST /api/properties` — cria (JSON ou multipart `images`)
+- `PUT /api/properties/:id` — atualiza (JSON/multipart)
+- `DELETE /api/properties/:id` — remove
+- `GET /api/leads` — lista com paginação simples (`page`, `limit`, `status`)
+- `POST /api/leads` — cria lead
+
+## Autenticação (prefixo /auth)
+- `POST /auth/register` — cadastro com consentimento LGPD/PY
+- `POST /auth/login` — retorna `accessToken` e `refreshToken`
+- `POST /auth/refresh` — renova o par de tokens
+- `POST /auth/logout` — invalida o refresh token atual
+- `GET /auth/me` — retorna usuário autenticado (Bearer token)
+- Middleware: `authMiddleware` (JWT + refresh), `checkRole('admin'|'corretor'|'cliente')`
 
 ---
 
 ## Como rodar localmente
-1) Instale as dependências:
-```bash
-npm install
-```
-2) (Opcional) Popule imóveis de exemplo:
-```bash
-npm run seed
-```
-3) Inicie em modo desenvolvimento (nodemon):
-```bash
-npm run dev
-```
-O servidor sobe em `http://localhost:3000` (ou na porta definida em `PORT`) e expõe `/health` para verificação.
+1. Instale dependências: `npm install`
+2. (Opcional) Popule dados de exemplo: `npm run seed`
+3. Inicie o servidor: `npm run dev`
+   - Sobe em `http://localhost:3000` (ou `PORT` definido) com `/health` para verificação
 
 ---
 
-## Como fazer deploy no Railway
-1. Conecte este repositório ao Railway e crie um serviço **Node.js app**.
-2. Configure os comandos:
-   - **Build:** `npm install`
-   - **Start:** `npm start`
-3. Em **Environment Variables**, defina:
-   - `MONGODB_URI` (string do MongoDB Atlas)
+## Deploy no Railway
+1. Conecte o repositório ao Railway e crie um serviço **Node.js**.
+2. Comandos:
+   - Build: `npm install`
+   - Start: `npm start`
+3. Variáveis de ambiente:
+   - `MONGODB_URI` (Mongo Atlas)
+   - `JWT_SECRET` (chave forte)
    - `NODE_ENV=production`
-   - `PORT=3000` (ou deixe Railway definir)
+   - `PORT=3000` (ou deixe Railway atribuir)
 4. Deploy e teste a URL gerada (ex.: `https://seu-app.up.railway.app`).
-> Dica: se precisar de dados de exemplo, rode `npm run seed` via console do Railway apenas uma vez.
+5. Caso precise de dados exemplo, rode `npm run seed` no console do Railway uma única vez.
 
 ---
 
-## Rotas principais
-### Páginas (EJS)
-- `GET /` — home com destaques recentes
-- `GET /properties` — listagem com filtros de categoria, operação, preço e cidade
-- `GET /properties/:id` — detalhe do imóvel com galeria e mapa embed
-- `GET /contact` + `POST /contact` — formulário de lead que grava no MongoDB
-- `GET /admin` — atalho para `/admin/properties`
-- `GET /admin/properties` — grid de imóveis
-- `GET /admin/properties/new` + `POST /admin/properties` — cadastro com upload múltiplo (`images`) ou URLs separados
-- `GET /admin/properties/edit/:id` + `POST /admin/properties/edit/:id` — edição
-- `POST /admin/properties/delete/:id` — exclusão
-- `GET /admin/leads` — tabela de leads
-
-### API REST (prefixo /api)
-- `GET /api/properties` — lista imóveis com filtros por query (`category`, `type`, `city`, `min`, `max`, `status`)
-- `GET /api/properties/:id` — detalhe
-- `POST /api/properties` — cria imóvel (JSON ou multipart com `images`)
-- `PUT /api/properties/:id` — atualiza (JSON ou multipart)
-- `DELETE /api/properties/:id` — remove
-- `GET /api/leads` — lista leads com paginação simples (`page`, `limit`, `status`)
-- `POST /api/leads` — cria lead a partir de formulários/integrações
-
-### Autenticação (prefixo /auth)
-- `POST /auth/register` — cria usuário com consentimento LGPD/Ley PY
-- `POST /auth/login` — retorna `accessToken` e `refreshToken`
-- `POST /auth/refresh` — gera novo par de tokens a partir de `refreshToken`
-- `POST /auth/logout` — invalida o refresh token atual
-- `GET /auth/me` — retorna o usuário autenticado (Bearer token)
-
----
-
-## Testar rapidamente
-- Criar imóvel (JSON puro):
+## Exemplos rápidos de API
 ```bash
+# Criar imóvel
 curl -X POST http://localhost:3000/api/properties \
   -H "Content-Type: application/json" \
   -d '{"title":"Kitnet","type":"aluguel","category":"apartamento","status":"ativo","price":500,"address":"Rua A, 100","neighborhood":"Centro","city":"Asunción","bedrooms":1,"bathrooms":1,"area":35,"images":["https://via.placeholder.com/800"]}'
-```
-- Listar imóveis com filtro: `curl "http://localhost:3000/api/properties?city=Asuncion&category=apartamento"`
-- Criar lead: `curl -X POST http://localhost:3000/api/leads -H "Content-Type: application/json" -d '{"name":"Teste","email":"teste@example.com","interest":"compra"}'`
 
----
+# Listar imóveis filtrando
+curl "http://localhost:3000/api/properties?city=Asuncion&category=apartamento"
 
-## Estrutura de pastas (resumida)
-```
-public/           # CSS, JS e uploads
-src/
-  config/         # env, db e compliance
-  controllers/    # lógica das rotas
-  middleware/     # auth, validação, roles
-  models/         # Mongoose models
-  routes/         # rotas web/api/auth
-  utils/          # utilidades (ex.: consentimento)
-  views/          # templates EJS + partials
-server.js         # shim de entrada -> src/server.js
+# Criar lead
+curl -X POST http://localhost:3000/api/leads \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Teste","email":"teste@example.com","interest":"compra"}'
 ```
 
 ---
 
-## Próximos passos sugeridos
-- Upload para S3/Cloudinary e integração de mapas (Leaflet/Google Maps)
-- Paginação e filtros avançados + indexação no Mongo
+## Próximos passos
+- Armazenar uploads em S3/Cloudinary e adicionar mapas reais (Google/Leaflet)
+- Paginação e filtros avançados com índices no MongoDB
 - Logs/observabilidade, testes automatizados e deploy containerizado
