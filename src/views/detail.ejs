@@ -1,0 +1,22 @@
+<%- include('layout', { body: `
+  <h1>${property.title}</h1>
+  <h4 class="text-muted">${formatLocation(property)}</h4>
+
+  <div class="row mt-4">
+    <div class="col-md-7">
+      <img src="${property.images?.[0] || '/placeholder.jpg'}" class="img-fluid rounded shadow-sm" />
+    </div>
+    <div class="col-md-5">
+      <h3 class="text-success">$${property.price}</h3>
+      <p>${property.description}</p>
+
+      <ul class="list-group mb-3">
+        <li class="list-group-item"><b>Quartos:</b> ${property.bedrooms}</li>
+        <li class="list-group-item"><b>Banheiros:</b> ${property.bathrooms}</li>
+        <li class="list-group-item"><b>Área:</b> ${property.area} m²</li>
+      </ul>
+
+      <a href="/contato" class="btn btn-primary w-100">Tenho interesse</a>
+    </div>
+  </div>
+` }) %>

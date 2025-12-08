@@ -1,0 +1,23 @@
+<%- include('../layout', { body: `
+  <h1>Novo Imóvel</h1>
+
+  <form method="POST" class="mt-3">
+
+    <label class="form-label">Título</label>
+    <input name="title" class="form-control mb-3" required />
+
+    <label class="form-label">Preço</label>
+    <input type="number" name="price" class="form-control mb-3" required />
+
+    <label class="form-label">Cidade</label>
+    <input name="city" class="form-control mb-3" required />
+
+    <label class="form-label">Bairro</label>
+    <input name="neighborhood" class="form-control mb-3" required />
+
+    <label class="form-label">Imagens (URLs separadas por vírgula)</label>
+    <input name="images" class="form-control mb-3" />
+
+    <button class="btn btn-primary w-100">Cadastrar</button>
+  </form>
+` }) %>

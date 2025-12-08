@@ -1,0 +1,19 @@
+<%- include('layout', { body: `
+  <h1 class="mb-4">Últimos imóveis</h1>
+
+  <div class="row">
+    ${featured.map(p => `
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="${p.images?.[0] || '/placeholder.jpg'}" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">${p.title}</h5>
+            <p class="card-text">${formatLocation(p)}</p>
+            <p class="fw-bold text-success">$${p.price}</p>
+            <a href="/imoveis/${p._id}" class="btn btn-primary w-100">Ver detalhes</a>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+` }) %>

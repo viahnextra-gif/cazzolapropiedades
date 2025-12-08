@@ -1,0 +1,19 @@
+<%- include('layout', { body: `
+  <h1>Imóveis disponíveis</h1>
+
+  <div class="row mt-4">
+    ${properties.map(p => `
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <img src="${p.images?.[0] || '/placeholder.jpg'}" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">${p.title}</h5>
+            <p>${formatLocation(p)}</p>
+            <p class="fw-bold">$${p.price}</p>
+            <a href="/imoveis/${p._id}" class="btn btn-outline-primary w-100">Detalhes</a>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+` }) %>

@@ -1,0 +1,24 @@
+<%- include('layout', { body: `
+  <h1>Contato</h1>
+
+  ${submitted ? `
+    <div class="alert alert-success">Mensagem enviada com sucesso!</div>
+  ` : ''}
+
+  <form method="POST" class="mt-4">
+
+    <label class="form-label">Nome</label>
+    <input name="name" class="form-control mb-3" required />
+
+    <label class="form-label">Email</label>
+    <input name="email" type="email" class="form-control mb-3" required />
+
+    <label class="form-label">Telefone</label>
+    <input name="phone" class="form-control mb-3" />
+
+    <label class="form-label">Mensagem</label>
+    <textarea name="message" class="form-control mb-3"></textarea>
+
+    <button class="btn btn-primary w-100">Enviar</button>
+  </form>
+` }) %>
