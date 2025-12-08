@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const Property = require('../models/Property');
 const Lead = require('../models/Lead');
-const { buildFilters } = require('./propertyController');
+const { buildFilters } = require('../services/propertyService');
 
 function formatLocation(property) {
   return property.fullLocation || property.address || property.neighborhood || '';
