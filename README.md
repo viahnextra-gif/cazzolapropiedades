@@ -1,6 +1,6 @@
 # Cazzola Propiedades
 
-Plataforma imobiliária full-stack com Express, MongoDB e EJS: catálogo de imóveis com filtros, painel administrativo com CRUD, uploads de imagens, leads com consentimento LGPD/Ley PY e autenticação por JWT.
+Plataforma imobiliária full-stack com Express, MongoDB e EJS: catálogo de imóveis com filtros, painel administrativo com CRUD, uploads de imagens, leads com consentimento LGPD/Ley PY e autenticação JWT.
 
 ---
 
@@ -8,11 +8,11 @@ Plataforma imobiliária full-stack com Express, MongoDB e EJS: catálogo de imó
 - **Runtime:** Node.js 18+
 - **Framework:** Express 5 + EJS (SSR) com layout do protótipo integrado
 - **Banco:** MongoDB + Mongoose (NoSQL flexível para atributos dinâmicos)
-- **Upload:** Multer gravando arquivos em `public/uploads`
-- **Middlewares:** morgan (logs), cors, express-validator, dotenv, auth JWT
+- **Upload:** Multer salvando em `public/uploads`
+- **Middlewares:** morgan (logs), cors, express-validator, dotenv, autenticação JWT
 - **Frontend:** CSS autoral em `public/css/site.css`, templates EJS em `src/views`
 
-> Alternativa considerada: PostgreSQL + Prisma (consistência relacional/BI), porém com custo de migrações rigorosas.
+> Alternativa considerada: PostgreSQL + Prisma (consistência relacional e BI), mas com custo de migrações estruturadas.
 
 ---
 
@@ -55,7 +55,7 @@ DPO_EMAIL=dpo@example.com
 ---
 
 ## Modelos principais
-- **Property**: título, tipo (venda/aluguel), categoria, status, preço, endereço/bairro/cidade, quartos, banheiros, área, descrição, imagens `[String]`, datas de criação/atualização.
+- **Property**: título, tipo (venda/aluguel), categoria, status, preço, endereço/bairro/cidade, quartos, banheiros, área, descrição, imagens `[String]`, timestamps.
 - **Lead**: nome, email, telefone, interesse, mensagem, propertyId opcional, status, timestamps.
 - **User**: nome, email, telefone, senha hash, role (`admin`/`corretor`/`cliente`), status, consentimento LGPD/PY (aceito/data/versão/ip), favoritos `[ObjectId]`, documentos enviados, agenda, notificações, refresh tokens, timestamps.
 
@@ -73,6 +73,8 @@ DPO_EMAIL=dpo@example.com
 - `POST /admin/properties/delete/:id` — exclusão
 - `GET /admin/leads` — listagem de leads
 
+---
+
 ## API REST (prefixo /api)
 - `GET /api/properties` — lista com filtros por query (`category`, `type`, `city`, `min`, `max`, `status`)
 - `GET /api/properties/:id` — detalhe
@@ -82,13 +84,13 @@ DPO_EMAIL=dpo@example.com
 - `GET /api/leads` — lista com paginação simples (`page`, `limit`, `status`)
 - `POST /api/leads` — cria lead
 
-## Autenticação (prefixo /auth)
+### Autenticação (prefixo /auth)
 - `POST /auth/register` — cadastro com consentimento LGPD/PY
 - `POST /auth/login` — retorna `accessToken` e `refreshToken`
-- `POST /auth/refresh` — renova o par de tokens
+- `POST /auth/refresh` — renova tokens
 - `POST /auth/logout` — invalida o refresh token atual
-- `GET /auth/me` — retorna usuário autenticado (Bearer token)
-- Middleware: `authMiddleware` (JWT + refresh), `checkRole('admin'|'corretor'|'cliente')`
+- `GET /auth/me` — usuário autenticado (Bearer token)
+- Middlewares: `authMiddleware` (JWT + refresh) e `checkRole('admin'|'corretor'|'cliente')`
 
 ---
 
@@ -96,7 +98,7 @@ DPO_EMAIL=dpo@example.com
 1. Instale dependências: `npm install`
 2. (Opcional) Popule dados de exemplo: `npm run seed`
 3. Inicie o servidor: `npm run dev`
-   - Sobe em `http://localhost:3000` (ou `PORT` definido) com `/health` para verificação
+   - Disponível em `http://localhost:3000` (ou `PORT` definido) com `/health` para verificação
 
 ---
 
@@ -109,7 +111,7 @@ DPO_EMAIL=dpo@example.com
    - `MONGODB_URI` (Mongo Atlas)
    - `JWT_SECRET` (chave forte)
    - `NODE_ENV=production`
-   - `PORT=3000` (ou deixe Railway atribuir)
+   - `PORT=3000` (ou deixe Railway definir)
 4. Deploy e teste a URL gerada (ex.: `https://seu-app.up.railway.app`).
 5. Caso precise de dados exemplo, rode `npm run seed` no console do Railway uma única vez.
 
