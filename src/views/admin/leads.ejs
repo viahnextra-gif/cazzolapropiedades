@@ -1,63 +1,25 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Leads | Admin</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/site.css" />
-  </head>
-  <body data-page="admin">
-    <%- include('../partials/header') %>
+<%- include('../layout', { body: `
+  <h1>Leads</h1>
 
-    <section class="section">
-      <div class="section-heading">
-        <div>
-          <h1>Leads recebidos</h1>
-          <p class="lead">Todos os envios do formulário de contato.</p>
-        </div>
-        <a class="button secondary" href="/admin/properties">Voltar para imóveis</a>
-      </div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Interesse</th>
+        <th>Status</th>
+      </tr>
+    </thead>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>E-mail</th>
-              <th>Telefone</th>
-              <th>Interesse</th>
-              <th>Status</th>
-              <th>Imóvel</th>
-              <th>Mensagem</th>
-              <th>Data</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (leads && leads.length) { %>
-              <% leads.forEach((lead) => { %>
-                <tr>
-                  <td><%= lead.name %></td>
-                  <td><%= lead.email %></td>
-                  <td><%= lead.phone || '-' %></td>
-                  <td><%= lead.interest %></td>
-                  <td><%= lead.status %></td>
-                  <td><%= lead.property ? lead.property.title : '-' %></td>
-                  <td><%= lead.message || '-' %></td>
-                  <td><%= new Date(lead.createdAt).toLocaleDateString('pt-BR') %></td>
-                </tr>
-              <% }) %>
-            <% } else { %>
-              <tr><td colspan="8">Nenhum lead ainda.</td></tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <%- include('../partials/footer') %>
-    <script src="/js/main.js"></script>
-  </body>
-</html>
+    <tbody>
+      ${leads.map(l => `
+        <tr>
+          <td>${l.name}</td>
+          <td>${l.email}</td>
+          <td>${l.interest}</td>
+          <td>${l.status}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  </table>
+` }) %>

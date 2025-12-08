@@ -1,106 +1,22 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= property.title %> | Cazzola Propiedades</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/site.css" />
-  </head>
-  <body data-page="detail">
-    <%- include('partials/header') %>
+<%- include('layout', { body: `
+  <h1>${property.title}</h1>
+  <h4 class="text-muted">${formatLocation(property)}</h4>
 
-    <section class="section property-detail">
-      <div class="section-heading">
-        <div>
-          <div class="pill"><%= property.category %> • <%= property.type %></div>
-          <h1><%= property.title %></h1>
-          <p class="lead"><%= formatLocation(property) %></p>
-        </div>
-        <div class="actions-row">
-          <a class="button secondary" href="/contact?propertyId=<%= property._id %>&title=<%= property.title %>">Quero visitar</a>
-          <a
-            class="button primary"
-            href="https://wa.me/?text=<%= encodeURIComponent(`Olá! Tenho interesse em ${property.title} (${formatLocation(property)})`) %>"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Falar no WhatsApp</a
-          >
-        </div>
-      </div>
+  <div class="row mt-4">
+    <div class="col-md-7">
+      <img src="${property.images?.[0] || '/placeholder.jpg'}" class="img-fluid rounded shadow-sm" />
+    </div>
+    <div class="col-md-5">
+      <h3 class="text-success">$${property.price}</h3>
+      <p>${property.description}</p>
 
-      <div class="detail-grid">
-        <div>
-          <div class="detail-main-image">
-            <img
-              data-main-image
-              src="<%= property.images && property.images[0] ? property.images[0] : 'https://via.placeholder.com/1200x700' %>"
-              alt="Imagem principal"
-            />
-          </div>
-          <div class="thumbs">
-            <% (property.images && property.images.length ? property.images : ['https://via.placeholder.com/400x240']).forEach((img) => { %>
-              <button type="button" class="thumb" data-thumb data-src="<%= img %>">
-                <img src="<%= img %>" alt="Miniatura" />
-              </button>
-            <% }) %>
-          </div>
-          <div class="detail-body">
-            <h3>Descrição</h3>
-            <p><%= property.description || 'Descrição em breve.' %></p>
+      <ul class="list-group mb-3">
+        <li class="list-group-item"><b>Quartos:</b> ${property.bedrooms}</li>
+        <li class="list-group-item"><b>Banheiros:</b> ${property.bathrooms}</li>
+        <li class="list-group-item"><b>Área:</b> ${property.area} m²</li>
+      </ul>
 
-            <h3>Características</h3>
-            <div class="property-meta">
-              <span><%= property.bedrooms %> quartos</span>
-              <span><%= property.bathrooms %> banheiros</span>
-              <span><%= property.area %> m²</span>
-              <span>Status: <%= property.status %></span>
-            </div>
-
-            <h3>Localização</h3>
-            <p><%= property.address %>, <%= property.fullLocation %></p>
-            <div class="map-embed">
-              <iframe
-                src="<%= property.mapUrl || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.345391227113!2d-46.656570723700876!3d-23.588116478781317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5993d63a0327%3A0x26f872607efbf664!2sAv.%20Paulista%2C%201000%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001310-100!5e0!3m2!1spt-BR!2sbr!4v1710000000000!5m2!1spt-BR!2sbr' %>"
-                width="100%"
-                height="320"
-                style="border:0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-
-        <aside class="detail-sidebar">
-          <div class="card">
-            <p class="badge">Disponível para <%= property.type %></p>
-            <h2 class="price">US$ <%= property.price %></h2>
-            <p class="small"><%= formatLocation(property) %></p>
-            <div class="stack">
-              <a class="button primary" href="/contact?propertyId=<%= property._id %>&title=<%= property.title %>">Solicitar contato</a>
-              <a
-                class="button secondary"
-                href="https://wa.me/?text=<%= encodeURIComponent(`Olá! Tenho interesse em ${property.title} (${formatLocation(property)})`) %>"
-                target="_blank"
-                rel="noopener noreferrer"
-                >WhatsApp</a
-              >
-            </div>
-          </div>
-          <div class="card">
-            <h3>Quer vender ou alugar?</h3>
-            <p class="small">Use o painel admin para publicar imóveis e acompanhar leads.</p>
-            <a class="button ghost" href="/admin/properties">Acessar painel</a>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <%- include('partials/footer') %>
-    <script src="/js/main.js"></script>
-  </body>
-</html>
+      <a href="/contato" class="btn btn-primary w-100">Tenho interesse</a>
+    </div>
+  </div>
+` }) %>

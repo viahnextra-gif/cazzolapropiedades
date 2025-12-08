@@ -1,67 +1,26 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | Imóveis</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/site.css" />
-  </head>
-  <body data-page="admin">
-    <%- include('../partials/header') %>
+<%- include('../layout', { body: `
+  <h1>Painel — Imóveis</h1>
 
-    <section class="section">
-      <div class="section-heading">
-        <div>
-          <h1>Painel de imóveis</h1>
-          <p class="lead">Gerencie cadastros, uploads e status.</p>
-        </div>
-        <a class="button primary" href="/admin/properties/new">+ Novo imóvel</a>
-      </div>
+  <a href="/admin/properties/new" class="btn btn-success mb-4">Novo Imóvel</a>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Categoria</th>
-              <th>Operação</th>
-              <th>Preço</th>
-              <th>Cidade</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (properties && properties.length) { %>
-              <% properties.forEach((property) => { %>
-                <tr>
-                  <td><%= property.title %></td>
-                  <td><%= property.category %></td>
-                  <td><%= property.type %></td>
-                  <td>US$ <%= property.price %></td>
-                  <td><%= formatLocation(property) %></td>
-                  <td><%= property.status %></td>
-                  <td class="table-actions">
-                    <a class="button ghost" href="/properties/<%= property._id %>" target="_blank">Ver</a>
-                    <a class="button secondary" href="/admin/properties/edit/<%= property._id %>">Editar</a>
-                    <form action="/admin/properties/delete/<%= property._id %>" method="post" style="display:inline">
-                      <button class="button danger" type="submit">Excluir</button>
-                    </form>
-                  </td>
-                </tr>
-              <% }) %>
-            <% } else { %>
-              <tr><td colspan="7">Cadastre o primeiro imóvel.</td></tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <%- include('../partials/footer') %>
-    <script src="/js/main.js"></script>
-  </body>
-</html>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Local</th>
+        <th>Preço</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${properties.map(p => `
+        <tr>
+          <td>${p.title}</td>
+          <td>${formatLocation(p)}</td>
+          <td>$${p.price}</td>
+          <td>${p.status}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  </table>
+` }) %>

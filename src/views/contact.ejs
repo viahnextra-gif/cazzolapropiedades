@@ -1,71 +1,24 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contato | Cazzola Propiedades</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/site.css" />
-  </head>
-  <body data-page="contact">
-    <%- include('partials/header') %>
+<%- include('layout', { body: `
+  <h1>Contato</h1>
 
-    <section class="section contact-section">
-      <div class="section-heading">
-        <div>
-          <h1>Fale com a Cazzola Propiedades</h1>
-          <p class="lead">Preencha o formulário e nossa equipe retornará rapidamente.</p>
-        </div>
-      </div>
-      <div
-        class="alert <%= errors && errors.length ? 'error' : submitted ? 'success' : 'hidden' %>"
-        data-lead-alert
-      >
-        <% if (errors && errors.length) { %>
-          <%= errors.map((err) => err.msg || err).join(', ') %>
-        <% } else if (submitted) { %>
-          Obrigado pelo contato! Responderemos em breve.
-        <% } %>
-      </div>
+  ${submitted ? `
+    <div class="alert alert-success">Mensagem enviada com sucesso!</div>
+  ` : ''}
 
-      <div class="contact-grid">
-        <form class="card stack" action="/contact" method="post" data-lead-form>
-          <input type="hidden" name="property" value="<%= propertyId || '' %>" />
-          <input type="hidden" name="propertyTitle" value="<%= propertyTitle || '' %>" />
-          <label>Nome<input type="text" name="name" required /></label>
-          <label>E-mail<input type="email" name="email" required /></label>
-          <label>Telefone<input type="text" name="phone" /></label>
-          <label>Interesse
-            <select name="interest">
-              <option value="compra">Compra</option>
-              <option value="aluguel">Aluguel</option>
-              <option value="gestao">Gestão</option>
-              <option value="outro">Outro</option>
-            </select>
-          </label>
-          <label>Mensagem<textarea name="message" rows="4"></textarea></label>
-          <% if (propertyTitle) { %>
-            <p class="small">Ref.: <%= propertyTitle %></p>
-          <% } %>
-          <button class="button primary" type="submit">Enviar</button>
-        </form>
+  <form method="POST" class="mt-4">
 
-        <div class="card stack">
-          <h3>Atendimento personalizado</h3>
-          <p>Estamos prontos para agendar visitas, enviar mais fotos e simular condições.</p>
-          <div class="highlight">Todos os leads são gravados no MongoDB para acompanhamento no painel admin.</div>
-          <div class="social-links">
-            <a href="https://wa.me/">WhatsApp</a>
-            <a href="mailto:contato@cazzolapropiedades.com">E-mail</a>
-            <a href="tel:+5511999990000">Telefone</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <label class="form-label">Nome</label>
+    <input name="name" class="form-control mb-3" required />
 
-    <%- include('partials/footer') %>
-    <script src="/js/main.js"></script>
-  </body>
-</html>
+    <label class="form-label">Email</label>
+    <input name="email" type="email" class="form-control mb-3" required />
+
+    <label class="form-label">Telefone</label>
+    <input name="phone" class="form-control mb-3" />
+
+    <label class="form-label">Mensagem</label>
+    <textarea name="message" class="form-control mb-3"></textarea>
+
+    <button class="btn btn-primary w-100">Enviar</button>
+  </form>
+` }) %>

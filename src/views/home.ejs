@@ -1,125 +1,19 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cazzola Propiedades — Encontre seu próximo imóvel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/site.css" />
-  </head>
-  <body data-page="home">
-    <%- include('partials/header') %>
+<%- include('layout', { body: `
+  <h1 class="mb-4">Últimos imóveis</h1>
 
-    <section class="hero">
-      <div class="hero-content">
-        <div>
-          <div class="badge">Plataforma integrada — dados reais do painel admin</div>
-          <h1>Encontre, visite e feche negócios com a Cazzola Propiedades.</h1>
-          <p>
-            Uma experiência imobiliária completa com curadoria, tour virtual e equipe especializada. Agora conectado ao banco
-            real para listar, editar e publicar imóveis.
-          </p>
-          <div class="actions-row">
-            <a class="button primary" href="/properties">Explorar imóveis</a>
-            <a class="button secondary" href="/contact">Fale com um consultor</a>
-          </div>
-        </div>
-        <div>
-          <div class="card" style="height: 100%">
-            <img
-              src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80"
-              alt="Prédio moderno"
-            />
-            <p class="small">Galeria conectada a dados reais dos imóveis em destaque.</p>
+  <div class="row">
+    ${featured.map(p => `
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="${p.images?.[0] || '/placeholder.jpg'}" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">${p.title}</h5>
+            <p class="card-text">${formatLocation(p)}</p>
+            <p class="fw-bold text-success">$${p.price}</p>
+            <a href="/imoveis/${p._id}" class="btn btn-primary w-100">Ver detalhes</a>
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="section" id="destaques">
-      <div class="section-heading">
-        <div>
-          <h2>Imóveis em destaque</h2>
-          <p class="lead">Cards montados com os últimos cadastros ativos (máx. 6).</p>
-        </div>
-        <a class="button secondary" href="/properties">Ver todos</a>
-      </div>
-      <div class="cards-grid">
-        <% if (featured && featured.length) { %>
-          <% featured.forEach((property) => { %>
-            <article class="card property-card">
-              <div class="property-media">
-                <img
-                  src="<%= property.images && property.images[0] ? property.images[0] : 'https://via.placeholder.com/800x450' %>"
-                  alt="Foto do imóvel"
-                />
-              </div>
-              <div class="property-content">
-                <div class="pill"><%= property.category %> • <%= property.type %></div>
-                <h3><%= property.title %></h3>
-                <div class="price">US$ <%= property.price %></div>
-                <p class="small"><%= formatLocation(property) %></p>
-                <div class="property-meta">
-                  <span><%= property.bedrooms %> quartos</span>
-                  <span><%= property.bathrooms %> banheiros</span>
-                  <span><%= property.area %> m²</span>
-                </div>
-                <a class="button secondary" href="/properties/<%= property._id %>">Ver detalhes</a>
-              </div>
-            </article>
-          <% }) %>
-        <% } else { %>
-          <p class="small">Cadastre imóveis no painel admin para vê-los aqui.</p>
-        <% } %>
-      </div>
-    </section>
-
-    <section class="section" id="services">
-      <h2>Serviços</h2>
-      <div class="cards-grid">
-        <div class="card">
-          <h3>Venda e locação</h3>
-          <p>Estratégia comercial com fotos profissionais, anúncios segmentados e acompanhamento jurídico.</p>
-          <div class="highlight">Publicação automática e atualização de disponibilidade conectadas ao backend.</div>
-        </div>
-        <div class="card">
-          <h3>Gestão patrimonial</h3>
-          <p>Administração completa do imóvel com prestação de contas, vistorias e manutenção preventiva.</p>
-          <div class="highlight">Integração futura com painel do proprietário e relatórios financeiros.</div>
-        </div>
-        <div class="card">
-          <h3>Consultoria</h3>
-          <p>Estudos de mercado, viabilidade de investimentos e análise de rentabilidade.</p>
-          <div class="highlight">Dashboards e dados de mercado serão conectados em próxima fase.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="blog">
-      <h2>Conteúdos e novidades</h2>
-      <p class="lead">Espaço para artigos sobre mercado, guias de compra/locação e notícias da Cazzola Propiedades.</p>
-      <div class="cards-grid">
-        <article class="card">
-          <h3>Como preparar seu imóvel para vender mais rápido</h3>
-          <p class="small">Checklist de staging, iluminação e fotos. Conteúdo poderá vir de um CMS em breve.</p>
-          <a class="button secondary" href="#">Ler artigo</a>
-        </article>
-        <article class="card">
-          <h3>Bairros em alta em 2024</h3>
-          <p class="small">Comparativo de infraestrutura, segurança e valorização.</p>
-          <a class="button secondary" href="#">Explorar</a>
-        </article>
-        <article class="card">
-          <h3>Guia rápido para locatários</h3>
-          <p class="small">Documentação, vistoria e dicas para uma locação tranquila.</p>
-          <a class="button secondary" href="#">Baixar guia</a>
-        </article>
-      </div>
-    </section>
-
-    <%- include('partials/footer') %>
-    <script src="/js/main.js"></script>
-  </body>
-</html>
+    `).join('')}
+  </div>
+` }) %>
