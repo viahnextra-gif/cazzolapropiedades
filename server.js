@@ -4,10 +4,12 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const connectDB = require('./src/config/db');
 const webRoutes = require('./src/routes/web');
 const apiRoutes = require('./src/routes/api');
+const authRoutes = require('./src/routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,7 +29,8 @@ connectDB(process.env.MONGODB_URI)
   });
 
 // Middlewares globais
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || true, credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -44,6 +47,9 @@ app.get('/health', (req, res) => res.send('OK'));
 
 // API REST
 app.use('/api', apiRoutes);
+
+// Rotas de Autenticação
+app.use('/auth', authRoutes);
 
 // Rotas Web
 app.use('/', webRoutes);

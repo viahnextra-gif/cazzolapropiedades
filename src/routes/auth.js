@@ -5,14 +5,14 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 // Registro público
-router.post('/register', authController.register);
+router.post('/register', authController.registerUser);
 // Login público
-router.post('/login', authController.login);
-// Refresh token
-router.post('/refresh', authController.refresh);
-// Logout (precisa de refresh token válido)
-router.post('/logout', authController.logout);
-// Perfil do usuário autenticado
-router.get('/me', authMiddleware, authController.me);
+router.post('/login', authController.loginUser);
+// Refresh token via cookie/body
+router.post('/refresh', authController.refreshToken);
+// Logout (invalida refresh token)
+router.post('/logout', authController.logoutUser);
+// Perfil autenticado
+router.get('/me', authMiddleware, authController.getProfile);
 
 module.exports = router;

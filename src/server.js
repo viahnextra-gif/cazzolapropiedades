@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const env = require('./config/env');
 const connectDB = require('./config/db');
@@ -20,7 +21,7 @@ if (!env.MONGODB_URI) {
   console.error('MONGODB_URI não definido. Configure sua conexão no arquivo .env.');
   process.exit(1);
 } else {
-  connectDB()
+  connectDB(env.MONGODB_URI)
     .then(() => {
       // eslint-disable-next-line no-console
       console.log('MongoDB conectado com sucesso');
@@ -35,7 +36,8 @@ if (!env.MONGODB_URI) {
 }
 
 // Middlewares globais.
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || true, credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));

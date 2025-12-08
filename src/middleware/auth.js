@@ -1,14 +1,16 @@
 const jwt = require('jsonwebtoken');
 const env = require('../config/env');
-const User = require('../models/user');
+const User = require('../models/User');
 
-// Middleware que valida o access token JWT e injeta o usuário na requisição.
+// Middleware que valida o access token (Bearer ou cookie httpOnly) e injeta o usuário na requisição.
 module.exports = async function authMiddleware(req, res, next) {
   try {
     const authHeader = req.headers.authorization || '';
-    const token = authHeader.startsWith('Bearer ')
+    const bearerToken = authHeader.startsWith('Bearer ')
       ? authHeader.replace('Bearer ', '').trim()
       : null;
+
+    const token = bearerToken || req.cookies?.accessToken;
 
     if (!token) {
       return res.status(401).json({ message: 'Token não informado' });
